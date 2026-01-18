@@ -40,14 +40,14 @@ The system generates:
 This enables targeted retention strategies such as discounts, service improvements, and contract upgrades.
 
 ## 📁 Project Structure
-
+```
 Customer-Retention-Intelligence-System/
 ├── data/
 ├── notebooks/
 ├── models/
 ├── reports/
 └── README.md
-
+```
 ## 🛠 Tech Stack
 - Python
 - Pandas, NumPy
