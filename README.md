@@ -39,6 +39,8 @@ The system generates:
 
 This enables targeted retention strategies such as discounts, service improvements, and contract upgrades.
 
+<img width="614" height="924" alt="image" src="https://github.com/user-attachments/assets/fd777dec-d4f9-40fb-b128-3fd1893a7e36" />
+
 ## 📁 Project Structure
 ```
 Customer-Retention-Intelligence-System/
