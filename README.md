@@ -1,91 +1,125 @@
 # Customer Retention Intelligence System
 
-A machine learning–driven customer churn prediction and retention analytics platform designed to help subscription businesses identify at-risk customers and take proactive action.
+**Predict who's about to churn, quantify what it costs, and act before they leave.**
 
-## 🚀 Overview
-This project builds a complete end-to-end churn intelligence system using real telecom customer data. It combines exploratory data analysis, statistical insights, and machine learning to predict customer churn and quantify revenue at risk.
+An end-to-end churn-analytics project on 7,043 telecom customers: a machine-learning
+model scores every customer's likelihood of leaving, and an interactive **Power BI**
+dashboard turns those scores into a prioritized, money-aware retention plan.
 
-## 📊 Dataset
-IBM Telco Customer Churn Dataset (7,000+ customers)
+![Python](https://img.shields.io/badge/Python-3.x-3776AB?logo=python&logoColor=white)
+![scikit-learn](https://img.shields.io/badge/scikit--learn-ML-F7931E?logo=scikitlearn&logoColor=white)
+![Power BI](https://img.shields.io/badge/Power%20BI-Dashboard-F2C811?logo=powerbi&logoColor=black)
+![Dataset](https://img.shields.io/badge/customers-7%2C043-2E75B6)
 
-Features include:
-- Tenure
-- Monthly & Total Charges
-- Contract Type
-- Internet Service
-- Payment Method
-- Customer Demographics
+![Churn analytics dashboard](dashboard/churn_dashboard.png)
 
-Target:
-- Churn (Yes / No)
+---
 
-## 🔍 Key Insights
-- Month-to-month customers churn 15× more than two-year contract users
-- Fiber optic users show the highest churn
-- High-paying customers are more likely to leave
+## Why it matters
 
-## 🤖 Machine Learning
-Model: Logistic Regression  
-Metrics:
-- ROC AUC ≈ 0.80+
+For any subscription business, keeping a customer is far cheaper than winning a new
+one — but retention budgets are limited. This project answers three questions a
+commercial team actually asks:
 
-The model predicts churn probability for each customer and identifies the strongest churn drivers.
+1. **Who is likely to churn?** — a probability score for every customer.
+2. **How much is it worth?** — the revenue at risk behind each customer and segment.
+3. **Where should we act first?** — the high-value, high-risk segment to target.
 
-## 🧠 Churn Intelligence Engine
-The system generates:
-- Individual churn risk scores
-- High-risk customer lists
-- Revenue at risk estimates
-
-This enables targeted retention strategies such as discounts, service improvements, and contract upgrades.
-
-<img width="614" height="924" alt="image" src="https://github.com/user-attachments/assets/fd777dec-d4f9-40fb-b128-3fd1893a7e36" />
-
-## 📁 Project Structure
-```
-Customer-Retention-Intelligence-System/
-├── data/
-├── notebooks/
-├── models/
-├── reports/
-└── README.md
-```
-## 📊 Power BI Dashboard
-An interactive **Power BI** dashboard turns the churn model's output into a
-commercial-analytics deliverable — segmenting customers by risk and quantifying
-the **revenue at risk** so retention effort can be prioritized.
-
-![Churn dashboard](dashboard/churn_dashboard.png)
+## Results at a glance
 
 | Metric | Value |
 |---|---|
-| Customers analysed | 7,043 |
-| Overall churn rate | 26.5% |
-| **Annual revenue at risk** | **~$1.68M** |
-| High-risk customers flagged | 1,567 |
-| Churn model (ROC AUC) | **0.84** |
+| Customers analysed | **7,043** |
+| Overall churn rate | **26.5%** |
+| Annual **revenue at risk** | **~$1.68M** |
+| High-risk customers flagged | **1,567** |
+| Churn model — ROC AUC | **0.84** |
 
-**Pipeline:** `scripts/build_dashboard.py` cleans the data, trains the churn
-model, scores every customer, and derives a **risk tier** (High/Medium/Low) and
-**revenue at risk** (`MonthlyCharges × 12 × churn_probability`), writing a
-Power BI–ready table to `data/churn_scored.csv`.
+## Key insights
 
-**Build it:** the interactive dashboard is assembled in Power BI Desktop (free)
-from `data/churn_scored.csv` — step-by-step guide in
-[`powerbi/BUILD_GUIDE.md`](powerbi/BUILD_GUIDE.md) and all DAX measures in
-[`powerbi/DAX_measures.md`](powerbi/DAX_measures.md).
+- **Contract type is the #1 driver.** Month-to-month customers churn ~**15×** more
+  than two-year contract holders (≈43% vs ≈3%) — and they carry the bulk of the
+  revenue at risk.
+- **The first year is the danger zone.** Churn peaks in the 0–12 month tenure band
+  and falls steadily as customers mature.
+- **Fiber-optic and electronic-check customers churn most** — clear, targetable
+  operational signals.
+- **Revenue at risk concentrates** in month-to-month, short-tenure customers — the
+  exact segment a retention budget should hit first.
+
+## How it works
+
+```
+data/WA_Fn-UseC_-Telco-Customer-Churn.csv     raw data (7,043 customers)
+            |
+scripts/build_dashboard.py                     clean -> train churn model ->
+            |                                  score every customer ->
+            |                                  derive risk tier + revenue-at-risk
+            v
+data/churn_scored.csv                          Power BI-ready table (one row / customer)
+dashboard/churn_dashboard.png                  rendered dashboard preview
+```
+
+- **Churn model** — Logistic Regression (standardized features), **ROC AUC ≈ 0.84**,
+  producing a churn probability for every customer.
+- **Risk tier** — High (p ≥ 0.50) · Medium (0.30–0.50) · Low (< 0.30).
+- **Revenue at risk** — `MonthlyCharges × 12 × churn_probability`: the expected annual
+  revenue lost from a customer, weighted by how likely they are to leave.
+
+## The Power BI dashboard
+
+The interactive dashboard is built in **Power BI Desktop** (free) from
+`data/churn_scored.csv`: KPI cards, churn-rate breakdowns by contract / tenure /
+payment method, a risk-tier split, and revenue-at-risk views — all cross-filtered by
+slicers.
+
+- **Build guide:** [`powerbi/BUILD_GUIDE.md`](powerbi/BUILD_GUIDE.md) — step by step, ~45 min.
+- **DAX measures:** [`powerbi/DAX_measures.md`](powerbi/DAX_measures.md) — copy-paste ready.
+
+## Reproduce
 
 ```bash
 pip install -r requirements.txt
-python scripts/build_dashboard.py   # regenerates the scored data + dashboard preview
+python scripts/build_dashboard.py
 ```
 
-## 🛠 Tech Stack
-- Python
-- Pandas, NumPy
-- Scikit-learn
-- Matplotlib
-- **Power BI** (interactive dashboard) + **DAX**
+Regenerates `data/churn_scored.csv` and the dashboard preview, and prints the KPIs
+and model AUC.
 
-## 📌 Use Case
-Designed for subscription-based businesses such as telecom, SaaS, streaming, and e-commerce platforms to improve customer retention and reduce revenue loss.
+## Project structure
+
+```
+Customer-Retention-Intelligence-System/
+├── data/
+│   ├── WA_Fn-UseC_-Telco-Customer-Churn.csv   raw dataset
+│   └── churn_scored.csv                        scored, Power BI-ready output
+├── scripts/
+│   └── build_dashboard.py                      data pipeline + model + preview
+├── notebooks/
+│   └── Customer_Retention_Intelligence_System.ipynb   exploratory analysis
+├── models/
+│   └── churn_model.pkl                         trained model
+├── powerbi/
+│   ├── BUILD_GUIDE.md                          how to build the dashboard
+│   └── DAX_measures.md                         DAX for every measure
+├── dashboard/
+│   └── churn_dashboard.png                     rendered preview
+└── requirements.txt
+```
+
+## Tech stack
+
+**Python** (pandas, NumPy, scikit-learn, matplotlib) for the data pipeline and model ·
+**Power BI + DAX** for the interactive dashboard.
+
+## Dataset
+
+[IBM Telco Customer Churn](https://www.kaggle.com/datasets/blastchar/telco-customer-churn)
+— 7,043 customers with contract, tenure, charges, services, demographics, and a churn
+label.
+
+## Use case
+
+Built for subscription businesses — telecom, SaaS, streaming, e-commerce — to identify
+at-risk customers, quantify revenue exposure, and target retention (discounts, service
+fixes, contract upgrades) where it pays off most.
